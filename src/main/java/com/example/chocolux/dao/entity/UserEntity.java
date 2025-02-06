@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -19,11 +21,11 @@ public class UserEntity {
     private Long phoneNumber;
     private String email;
     private String message;
-    private String testimonial;
 
-    @OneToOne(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonManagedReference
-    private UserImageEntity userImageEntity;
+    private List<UserTestimonialEntity> userTestimonialEntities;
+
     public UserEntity(){
     }
 }

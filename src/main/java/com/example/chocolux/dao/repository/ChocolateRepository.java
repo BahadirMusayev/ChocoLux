@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChocolateRepository extends JpaRepository<ChocolateEntity, Integer> {
+    ChocolateEntity findByNameIgnoreCase(String name);
 }

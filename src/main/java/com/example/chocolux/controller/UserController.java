@@ -4,7 +4,9 @@ import com.example.chocolux.model.UserDtoInput;
 import com.example.chocolux.model.UserDtoOutput;
 import com.example.chocolux.service.UserService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,17 +20,19 @@ public class UserController {
     }
 
     @PostMapping("/contacts/us")
-    public void contactUs(@RequestBody UserDtoInput userDtoInput){
+    public void contactUs(@RequestBody UserDtoInput userDtoInput) {
         userService.contactUs(userDtoInput);
     }
 
-    @PostMapping("/send/testimonial")
-    public void sendTestimonial(String email, String testimonial){
-        userService.sendTestimonial(email, testimonial);
+    @PostMapping(value = "/send/testimonial", consumes = "multipart/form-data")
+    public void sendTestimonialImage(@RequestParam("email") String email,
+                                     @RequestParam("testimonial") String testimonial,
+                                     @RequestParam("image") MultipartFile image) throws IOException {
+        userService.sendTestimonial(email, testimonial, image);
     }
 
     @GetMapping("/show/testimonials")
-    public List<UserDtoOutput> showTestimonials(){
+    public List<UserDtoOutput> showTestimonials() {
         return userService.showTestimonials();
     }
 }

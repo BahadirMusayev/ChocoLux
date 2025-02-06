@@ -10,17 +10,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "user_image")
-public class UserImageEntity {
+@Table(name = "user_testimonials")
+public class UserTestimonialEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private byte [] image;
+    private String testimonial;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference
     private UserEntity userEntity;
-    public UserImageEntity(){
+
+    public UserTestimonialEntity(){
     }
 }
