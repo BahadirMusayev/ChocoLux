@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class OwnerDto {
-    private String aboutCompany;
+public class ChocolateDtoInput {
+    private String name;
+    private Double price;
 }

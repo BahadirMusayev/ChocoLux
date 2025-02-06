@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class OwnerDto {
-    private String aboutCompany;
+public class ExceptionDto {
+    private String message;
 }

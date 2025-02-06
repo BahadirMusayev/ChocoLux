@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class ChocolateDto {
-    private String name;
-    private Double price;
+public class UserDtoInput {
+    private String fullName;
+    private Long phoneNumber;
+    private String email;
+    private String message;
 }

@@ -2,6 +2,8 @@ package com.example.chocolux.service;
 
 import com.example.chocolux.dao.entity.OwnerEntity;
 import com.example.chocolux.dao.repository.OwnerRepository;
+import com.example.chocolux.mapper.OwnerMapper;
+import com.example.chocolux.model.OwnerDto;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,11 @@ public class OwnerService {
 
     private final OwnerRepository ownerRepository;
 
-    public OwnerService(OwnerRepository ownerRepository) {
+    private final OwnerMapper ownerMapper;
+
+    public OwnerService(OwnerRepository ownerRepository, OwnerMapper ownerMapper) {
         this.ownerRepository = ownerRepository;
+        this.ownerMapper = ownerMapper;
     }
 
     @Transactional
@@ -24,5 +29,12 @@ public class OwnerService {
         ownerEntity.setAboutCompany(aboutCompany);
         ownerRepository.save(ownerEntity);
         log.info("Edit Company Ended ");
+    }
+
+    public OwnerDto showAboutCompany(){
+        OwnerEntity ownerEntity = ownerRepository.
+                findById(1).orElseThrow();
+        return ownerMapper.
+                mapOwnerEntityToDto(ownerEntity);
     }
 }
