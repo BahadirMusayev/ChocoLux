@@ -18,7 +18,7 @@ public class UserTestimonialEntity {
     private byte [] image;
     private String testimonial;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference
     private UserEntity userEntity;

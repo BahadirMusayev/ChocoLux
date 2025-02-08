@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -43,7 +43,7 @@ public class UserService {
 
     @Transactional
     public void sendTestimonial(String email, String testimonial, MultipartFile image) throws IOException {
-        log.info("Save Testimonial Image Started... ");
+        log.info("Send Testimonial Started... ");
         UserEntity userEntity = userRepository.findByEmail(email);
         if (userEntity == null) {
             throw new NotFoundException("This user has not applied ");
@@ -55,14 +55,19 @@ public class UserService {
         userTestimonial.setImage(imageData);
         userTestimonial.setUserEntity(userEntity);
         userTestimonialRepository.save(userTestimonial);
-        log.info("Add Chocolate Image Ended ");
+        log.info("Send Testimonial Ended ");
     }
 
-    public List<UserDtoOutput> showTestimonials() {
-        log.info("Show Testimonials Started... ");
-        List<UserEntity> userEntities = userRepository.
-                findAll();
-        return userMapper.
-                mapUserEntityToDtoOutputs(userEntities);
+    public UserDtoOutput showTestimonial(Integer id) {
+        log.info("Show Testimonial Started... ");
+        UserEntity userEntity = userRepository.
+                findById(id).orElseThrow();
+        UserDtoOutput userDtoOutput = new UserDtoOutput();
+        userDtoOutput.setFullName(userEntity.getFullName());
+        userDtoOutput.setTestimonial(userEntity.getTestimonials().
+                stream().
+                map(UserTestimonialEntity::getTestimonial).
+                collect(Collectors.toList()));
+        return userDtoOutput;
     }
 }

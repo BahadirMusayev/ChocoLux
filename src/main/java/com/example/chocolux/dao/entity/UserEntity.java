@@ -24,7 +24,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonManagedReference
-    private List<UserTestimonialEntity> userTestimonialEntities;
+    private List<UserTestimonialEntity> testimonials;
 
     public UserEntity(){
     }
