@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping("/show/testimonial")
     public UserDtoOutput showTestimonial(@RequestParam("email") String email,
-                                         @RequestParam("testimonial") Integer testimonialID) {
+                                         @RequestParam("testimonialID") Integer testimonialID) {
         return userService.showTestimonial(email, testimonialID);
     }
 

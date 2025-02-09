@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class OwnerDto {
+    private String nameCompany;
     private String aboutCompany;
 }

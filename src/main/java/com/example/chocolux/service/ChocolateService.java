@@ -3,8 +3,10 @@ package com.example.chocolux.service;
 import com.example.chocolux.dao.entity.ChocolateEntity;
 import com.example.chocolux.dao.entity.ChocolateImageEntity;
 import com.example.chocolux.dao.exception.FoundException;
+import com.example.chocolux.dao.exception.NotFoundException;
 import com.example.chocolux.dao.repository.ChocolateImageRepository;
 import com.example.chocolux.dao.repository.ChocolateRepository;
+import com.example.chocolux.dao.repository.OwnerRepository;
 import com.example.chocolux.mapper.ChocolateMapper;
 import com.example.chocolux.model.ChocolateDto;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,10 +28,13 @@ public class ChocolateService {
 
     private final ChocolateImageRepository chocolateImageRepository;
 
-    public ChocolateService(ChocolateRepository chocolateRepository, ChocolateMapper chocolateMapper, ChocolateImageRepository chocolateImageRepository) {
+    private final OwnerRepository ownerRepository;
+
+    public ChocolateService(ChocolateRepository chocolateRepository, ChocolateMapper chocolateMapper, ChocolateImageRepository chocolateImageRepository, OwnerRepository ownerRepository) {
         this.chocolateRepository = chocolateRepository;
         this.chocolateMapper = chocolateMapper;
         this.chocolateImageRepository = chocolateImageRepository;
+        this.ownerRepository = ownerRepository;
     }
 
     @Transactional
@@ -41,13 +46,14 @@ public class ChocolateService {
         if (chocolateRepository.findByNameIgnoreCase(chocolateDto.getName()) != null) {
             throw new FoundException("This chocolate is also found");
         }
+        chocolateEntity.setOwnerEntity(ownerRepository.findById(1).orElseThrow());
         chocolateRepository.save(chocolateEntity);
 
         log.info("Add Chocolate Ended ");
     }
 
     @Transactional
-    public void addChocolateImage(String name, MultipartFile image) throws IOException {
+    public void editChocolateImage(String name, MultipartFile image) throws IOException {
         log.info("Add Chocolate Image Started... ");
 
         ChocolateEntity chocolateEntity = chocolateRepository.
@@ -72,7 +78,7 @@ public class ChocolateService {
 
         ChocolateEntity chocolateEntity = chocolateRepository.findByNameIgnoreCase(name);
         if(chocolateEntity==null){
-            throw new RuntimeException("Chocolate Not Found ");
+            throw new NotFoundException("Chocolate Not Found ");
         }
         return chocolateMapper.
                 mapEntityToChocolateDtoOutput(chocolateEntity);
@@ -84,6 +90,9 @@ public class ChocolateService {
         ChocolateEntity chocolateEntity = chocolateRepository.
                 findByNameIgnoreCase(name);
         ChocolateImageEntity chocolateImageEntity = chocolateEntity.getChocolateImageEntity();
+        if(chocolateImageEntity == null){
+            throw new NotFoundException("Chocolate Image Not Found !");
+        }
         byte[] imageData = chocolateImageEntity.getImage();
 
         response.setContentType("image/png");

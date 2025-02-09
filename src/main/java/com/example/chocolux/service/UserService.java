@@ -68,8 +68,14 @@ public class UserService {
 
         UserEntity userEntity = userRepository.
                 findByEmail(email);
+        if(userEntity==null){
+            throw new NotFoundException("User Not Found !");
+        }
         UserDtoOutput userDtoOutput = new UserDtoOutput();
         userDtoOutput.setFullName(userEntity.getFullName());
+        if (testimonialID >= userEntity.getTestimonials().size() || testimonialID < 0) {
+            throw new NotFoundException("Invalid Testimonial ID");
+        }
         userDtoOutput.setTestimonial(userEntity.getTestimonials()
                 .get(testimonialID).getTestimonial());
         return userDtoOutput;
@@ -81,14 +87,14 @@ public class UserService {
         UserEntity userEntity = userRepository.findByEmail(email);
 
         if (testimonialID > userEntity.getTestimonials().size() || testimonialID < 0) {
-            throw new RuntimeException("Invalid Testimonial ID");
+            throw new NotFoundException("Invalid Testimonial ID");
         }
 
         UserTestimonialEntity testimonial = userTestimonialRepository.findById(testimonialID)
-                .orElseThrow(() -> new RuntimeException("Testimonial not found"));
+                .orElseThrow(() -> new NotFoundException("Testimonial Not Found"));
 
         if (!testimonial.getUserEntity().getId().equals(userEntity.getId())) {
-            throw new RuntimeException("Testimonial does not belong to this user");
+            throw new NotFoundException("Testimonial does not belong to this user");
         }
 
         byte[] imageData = testimonial.getImage();

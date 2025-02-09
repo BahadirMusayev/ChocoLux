@@ -7,6 +7,11 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface OwnerMapper {
+    @Mapping(target = "nameCompany", source = "nameCompany")
     @Mapping(target = "aboutCompany", source = "aboutCompany")
     OwnerDto mapOwnerEntityToDto(OwnerEntity ownerEntity);
+
+    @Mapping(target = "nameCompany", source = "nameCompany")
+    @Mapping(target = "aboutCompany", source = "aboutCompany")
+    OwnerEntity mapOwnerDtoToEntity(OwnerDto ownerDto);
 }

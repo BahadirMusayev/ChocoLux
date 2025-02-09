@@ -22,11 +22,22 @@ public class OwnerService {
     }
 
     @Transactional
+    public void createOwner(OwnerDto ownerDto){
+        log.info("Create Owner Started... ");
+
+        OwnerEntity ownerEntity = ownerMapper.
+                mapOwnerDtoToEntity(ownerDto);
+        ownerRepository.save(ownerEntity);
+
+        log.info("Create Owner Ended ");
+    }
+
+    @Transactional
     public void editAboutCompany(String aboutCompany){
         log.info("Edit Company Started... ");
 
-        OwnerEntity ownerEntity = ownerRepository.
-                findById(1).orElseThrow();
+        OwnerEntity ownerEntity = ownerRepository.findById(1).
+                orElseThrow(()-> new RuntimeException("Owner Not Found !"));
         ownerEntity.setAboutCompany(aboutCompany);
         ownerRepository.save(ownerEntity);
 

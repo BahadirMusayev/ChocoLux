@@ -22,10 +22,10 @@ public class ChocolateController {
         chocolateService.addChocolate(chocolateDto);
     }
 
-    @PostMapping(value = "/add/chocolate/image", consumes = "multipart/form-data")
-    public void addChocolateImage(@RequestParam("name") String name,
+    @PutMapping(value = "/edit/chocolate/image", consumes = "multipart/form-data")
+    public void editChocolateImage(@RequestParam("name") String name,
                                   @RequestParam("image") MultipartFile image) throws IOException{
-        chocolateService.addChocolateImage(name, image);
+        chocolateService.editChocolateImage(name, image);
     }
 
     @GetMapping("/show/chocolate")
