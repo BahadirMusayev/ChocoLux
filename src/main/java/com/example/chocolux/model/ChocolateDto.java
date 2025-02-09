@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class ChocolateDtoInput {
+public class ChocolateDto {
     private String name;
     private Double price;
 }

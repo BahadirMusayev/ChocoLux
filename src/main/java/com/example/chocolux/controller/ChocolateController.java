@@ -1,6 +1,6 @@
 package com.example.chocolux.controller;
 
-import com.example.chocolux.model.ChocolateDtoInput;
+import com.example.chocolux.model.ChocolateDto;
 import com.example.chocolux.service.ChocolateService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +18,24 @@ public class ChocolateController {
     }
 
     @PostMapping("/add/chocolate")
-    public void addChocolate(@RequestBody ChocolateDtoInput chocolateDtoInput) {
-        chocolateService.addChocolate(chocolateDtoInput );
+    public void addChocolate(@RequestBody ChocolateDto chocolateDto) {
+        chocolateService.addChocolate(chocolateDto);
     }
 
     @PostMapping(value = "/add/chocolate/image", consumes = "multipart/form-data")
     public void addChocolateImage(@RequestParam("name") String name,
                                   @RequestParam("image") MultipartFile image) throws IOException{
         chocolateService.addChocolateImage(name, image);
+    }
+
+    @GetMapping("/show/chocolate")
+    public ChocolateDto showChocolate(@RequestParam("name") String name){
+        return chocolateService.showChocolate(name);
+    }
+
+    @GetMapping("/show/chocolate/image")
+    public void showChocolateImage(@RequestParam("name") String name,
+                                   HttpServletResponse response)throws IOException{
+        chocolateService.showChocolateImage(name, response);
     }
 }

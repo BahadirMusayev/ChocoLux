@@ -6,13 +6,15 @@ import com.example.chocolux.dao.exception.FoundException;
 import com.example.chocolux.dao.repository.ChocolateImageRepository;
 import com.example.chocolux.dao.repository.ChocolateRepository;
 import com.example.chocolux.mapper.ChocolateMapper;
-import com.example.chocolux.model.ChocolateDtoInput;
+import com.example.chocolux.model.ChocolateDto;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 @Service
 @Slf4j
@@ -31,20 +33,23 @@ public class ChocolateService {
     }
 
     @Transactional
-    public void addChocolate(ChocolateDtoInput chocolateDtoInput) {
+    public void addChocolate(ChocolateDto chocolateDto) {
         log.info("Add Chocolate Started... ");
+
         ChocolateEntity chocolateEntity = chocolateMapper.
-                mapChocolateDtoInputToEntity(chocolateDtoInput);
-        if (chocolateRepository.findByNameIgnoreCase(chocolateDtoInput.getName()) != null) {
+                mapChocolateDtoInputToEntity(chocolateDto);
+        if (chocolateRepository.findByNameIgnoreCase(chocolateDto.getName()) != null) {
             throw new FoundException("This chocolate is also found");
         }
         chocolateRepository.save(chocolateEntity);
+
         log.info("Add Chocolate Ended ");
     }
 
     @Transactional
     public void addChocolateImage(String name, MultipartFile image) throws IOException {
         log.info("Add Chocolate Image Started... ");
+
         ChocolateEntity chocolateEntity = chocolateRepository.
                 findByNameIgnoreCase(name);
         byte[] imageData = image.getBytes();
@@ -58,6 +63,37 @@ public class ChocolateService {
             chocolateImageEntity.setImage(imageData);
             chocolateImageRepository.save(chocolateImageEntity);
         }
+
         log.info("Add Chocolate Image Ended ");
+    }
+
+    public ChocolateDto showChocolate(String name){
+        log.info("Show Chocolate Started... ");
+
+        ChocolateEntity chocolateEntity = chocolateRepository.findByNameIgnoreCase(name);
+        if(chocolateEntity==null){
+            throw new RuntimeException("Chocolate Not Found ");
+        }
+        return chocolateMapper.
+                mapEntityToChocolateDtoOutput(chocolateEntity);
+    }
+
+    public void showChocolateImage(String name, HttpServletResponse response) throws IOException {
+        log.info("Show Chocolate Image Started... ");
+
+        ChocolateEntity chocolateEntity = chocolateRepository.
+                findByNameIgnoreCase(name);
+        ChocolateImageEntity chocolateImageEntity = chocolateEntity.getChocolateImageEntity();
+        byte[] imageData = chocolateImageEntity.getImage();
+
+        response.setContentType("image/png");
+        response.setContentLength(imageData.length);
+        response.setHeader("Content-Disposition", "inline; filename=\"profile.png\"");
+
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(imageData);
+        outputStream.flush();
+
+        log.info("Show Chocolate Image Ended ");
     }
 }

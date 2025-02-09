@@ -1,7 +1,7 @@
 package com.example.chocolux.mapper;
 
 import com.example.chocolux.dao.entity.ChocolateEntity;
-import com.example.chocolux.model.ChocolateDtoInput;
+import com.example.chocolux.model.ChocolateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,11 +11,11 @@ import java.util.List;
 public interface ChocolateMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "price", source = "price")
-    ChocolateEntity mapChocolateDtoInputToEntity(ChocolateDtoInput chocolateDtoInput);
+    ChocolateEntity mapChocolateDtoInputToEntity(ChocolateDto chocolateDto);
 
     @Mapping(target = "name", source = "name")
     @Mapping(target = "price", source = "price")
-    ChocolateDtoInput mapEntityToChocolateDtoOutput(ChocolateEntity chocolateEntity);
+    ChocolateDto mapEntityToChocolateDtoOutput(ChocolateEntity chocolateEntity);
 
-    List<ChocolateDtoInput> mapEntityToChocolateDtoOutputs(List<ChocolateEntity> chocolateEntities);
+    List<ChocolateDto> mapEntityToChocolateDtoOutputs(List<ChocolateEntity> chocolateEntities);
 }
