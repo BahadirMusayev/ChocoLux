@@ -11,6 +11,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/chocolate")
 public class ChocolateController {
+
     private final ChocolateService chocolateService;
 
     public ChocolateController(ChocolateService chocolateService) {

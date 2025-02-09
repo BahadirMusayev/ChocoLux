@@ -78,7 +78,7 @@ public class ChocolateService {
 
         ChocolateEntity chocolateEntity = chocolateRepository.findByNameIgnoreCase(name);
         if(chocolateEntity==null){
-            throw new NotFoundException("Chocolate Not Found ");
+            throw new NotFoundException("Chocolate Not Found !");
         }
         return chocolateMapper.
                 mapEntityToChocolateDtoOutput(chocolateEntity);

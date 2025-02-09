@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "chocolate_image")
+@Table(name = "chocolates_image")
 public class ChocolateImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,7 @@ public class ChocolateImageEntity {
     @JoinColumn(name = "chocolate_id", referencedColumnName = "id")
     @JsonBackReference
     private ChocolateEntity chocolateEntity;
+
     public ChocolateImageEntity(){
     }
 }

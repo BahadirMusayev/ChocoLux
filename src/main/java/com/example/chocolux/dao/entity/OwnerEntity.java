@@ -23,6 +23,7 @@ public class OwnerEntity {
     @OneToMany(mappedBy = "ownerEntity", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonManagedReference
     private List<ChocolateEntity> chocolateEntities;
+
     public OwnerEntity(){
     }
 }

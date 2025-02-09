@@ -91,7 +91,7 @@ public class UserService {
         }
 
         UserTestimonialEntity testimonial = userTestimonialRepository.findById(testimonialID)
-                .orElseThrow(() -> new NotFoundException("Testimonial Not Found"));
+                .orElseThrow(() -> new NotFoundException("Testimonial Not Found !"));
 
         if (!testimonial.getUserEntity().getId().equals(userEntity.getId())) {
             throw new NotFoundException("Testimonial does not belong to this user");
