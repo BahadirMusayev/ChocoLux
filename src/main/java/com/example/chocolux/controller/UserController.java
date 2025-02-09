@@ -4,12 +4,15 @@ import com.example.chocolux.model.UserDtoInput;
 import com.example.chocolux.model.UserDtoOutput;
 import com.example.chocolux.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @RestController
+@Validated
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -20,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/contacts/us")
-    public void contactUs(@RequestBody UserDtoInput userDtoInput) {
+    public void contactUs(@Valid @RequestBody UserDtoInput userDtoInput) {
         userService.contactUs(userDtoInput);
     }
 

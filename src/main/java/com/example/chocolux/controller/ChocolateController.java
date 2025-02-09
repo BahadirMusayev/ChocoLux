@@ -3,12 +3,15 @@ package com.example.chocolux.controller;
 import com.example.chocolux.model.ChocolateDto;
 import com.example.chocolux.service.ChocolateService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @RestController
+@Validated
 @RequestMapping("/api/chocolate")
 public class ChocolateController {
 
@@ -19,7 +22,7 @@ public class ChocolateController {
     }
 
     @PostMapping("/add/chocolate")
-    public void addChocolate(@RequestBody ChocolateDto chocolateDto) {
+    public void addChocolate(@Valid @RequestBody ChocolateDto chocolateDto) {
         chocolateService.addChocolate(chocolateDto);
     }
 

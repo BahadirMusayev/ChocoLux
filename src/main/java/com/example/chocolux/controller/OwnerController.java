@@ -2,9 +2,12 @@ package com.example.chocolux.controller;
 
 import com.example.chocolux.model.OwnerDto;
 import com.example.chocolux.service.OwnerService;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @RequestMapping("/api/owner")
 public class OwnerController {
 
@@ -15,7 +18,7 @@ public class OwnerController {
     }
 
     @PostMapping("/crate/owner")
-    public void createOwner(@RequestBody OwnerDto ownerDto){
+    public void createOwner(@Valid @RequestBody OwnerDto ownerDto){
         ownerService.createOwner(ownerDto);
     }
 
