@@ -22,15 +22,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/contacts/us")
+    @PostMapping("/contact/us")
     public void contactUs(@Valid @RequestBody UserDtoInput userDtoInput) {
         userService.contactUs(userDtoInput);
     }
 
     @PostMapping(value = "/send/testimonial", consumes = "multipart/form-data")
     public void sendTestimonial(@RequestParam("email") String email,
-                                     @RequestParam("testimonial") String testimonial,
-                                     @RequestParam("image") MultipartFile image) throws IOException {
+                                @RequestParam("testimonial") String testimonial,
+                                @RequestParam("image") MultipartFile image) throws IOException {
         userService.sendTestimonial(email, testimonial, image);
     }
 
@@ -42,8 +42,8 @@ public class UserController {
 
     @GetMapping("/show/testimonial/image")
     public void showTestimonialImage(@RequestParam("email") String email,
-                                    @RequestParam("testimonialID") Integer testimonialID,
-                                    HttpServletResponse response) throws IOException {
+                                     @RequestParam("testimonialID") Integer testimonialID,
+                                     HttpServletResponse response) throws IOException {
         userService.showTestimonialImage(email, testimonialID, response);
     }
 }

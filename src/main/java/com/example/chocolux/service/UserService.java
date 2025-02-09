@@ -57,7 +57,6 @@ public class UserService {
         userTestimonial.setTestimonial(testimonial);
         userTestimonial.setUserEntity(userEntity);
         userTestimonial.setImage(imageData);
-        userTestimonial.setUserEntity(userEntity);
         userTestimonialRepository.save(userTestimonial);
 
         log.info("Send Testimonial Ended ");
@@ -68,7 +67,7 @@ public class UserService {
 
         UserEntity userEntity = userRepository.
                 findByEmail(email);
-        if(userEntity==null){
+        if (userEntity == null) {
             throw new NotFoundException("User Not Found !");
         }
         UserDtoOutput userDtoOutput = new UserDtoOutput();
@@ -85,6 +84,10 @@ public class UserService {
         log.info("Show Testimonial Image Started... ");
 
         UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) {
+            throw new NotFoundException("User Not Found !");
+        }
 
         if (testimonialID > userEntity.getTestimonials().size() || testimonialID < 0) {
             throw new NotFoundException("Invalid Testimonial ID");

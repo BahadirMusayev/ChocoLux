@@ -22,7 +22,7 @@ public class OwnerController {
         ownerService.createOwner(ownerDto);
     }
 
-    @PostMapping("/edit/about/company")
+    @PutMapping("/edit/about/company")
     public void editAboutCompany(@RequestParam("aboutCompany") String aboutCompany){
         ownerService.editAboutCompany(aboutCompany);
     }

@@ -12,6 +12,7 @@ import com.example.chocolux.model.ChocolateDto;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,8 +59,14 @@ public class ChocolateService {
 
         ChocolateEntity chocolateEntity = chocolateRepository.
                 findByNameIgnoreCase(name);
+
+        if (chocolateEntity == null) {
+            throw new NotFoundException("Chocolate Not Found !");
+        }
+
         byte[] imageData = image.getBytes();
         ChocolateImageEntity chocolateImageEntity = chocolateEntity.getChocolateImageEntity();
+
         if (chocolateImageEntity == null) {
             ChocolateImageEntity chocolateImage = new ChocolateImageEntity();
             chocolateImage.setImage(imageData);
@@ -73,11 +80,12 @@ public class ChocolateService {
         log.info("Add Chocolate Image Ended ");
     }
 
-    public ChocolateDto showChocolate(String name){
+    public ChocolateDto showChocolate(String name) {
         log.info("Show Chocolate Started... ");
 
-        ChocolateEntity chocolateEntity = chocolateRepository.findByNameIgnoreCase(name);
-        if(chocolateEntity==null){
+        ChocolateEntity chocolateEntity = chocolateRepository.
+                findByNameIgnoreCase(name);
+        if (chocolateEntity == null) {
             throw new NotFoundException("Chocolate Not Found !");
         }
         return chocolateMapper.
@@ -89,13 +97,19 @@ public class ChocolateService {
 
         ChocolateEntity chocolateEntity = chocolateRepository.
                 findByNameIgnoreCase(name);
-        ChocolateImageEntity chocolateImageEntity = chocolateEntity.getChocolateImageEntity();
-        if(chocolateImageEntity == null){
+        if (chocolateEntity == null) {
+            throw new NotFoundException("Chocolate Not Found !");
+        }
+
+        ChocolateImageEntity chocolateImageEntity = chocolateEntity.
+                getChocolateImageEntity();
+        if (chocolateImageEntity == null) {
             throw new NotFoundException("Chocolate Image Not Found !");
         }
+
         byte[] imageData = chocolateImageEntity.getImage();
 
-        response.setContentType("image/png");
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
         response.setContentLength(imageData.length);
         response.setHeader("Content-Disposition", "inline; filename=\"profile.png\"");
 

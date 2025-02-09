@@ -1,6 +1,7 @@
 package com.example.chocolux.service;
 
 import com.example.chocolux.dao.entity.OwnerEntity;
+import com.example.chocolux.dao.exception.NotFoundException;
 import com.example.chocolux.dao.repository.OwnerRepository;
 import com.example.chocolux.mapper.OwnerMapper;
 import com.example.chocolux.model.OwnerDto;
@@ -37,7 +38,7 @@ public class OwnerService {
         log.info("Edit Company Started... ");
 
         OwnerEntity ownerEntity = ownerRepository.findById(1).
-                orElseThrow(()-> new RuntimeException("Owner Not Found !"));
+                orElseThrow(()-> new NotFoundException("Owner Not Found !"));
         ownerEntity.setAboutCompany(aboutCompany);
         ownerRepository.save(ownerEntity);
 
@@ -48,7 +49,7 @@ public class OwnerService {
         log.info("Show About Company Started... ");
 
         OwnerEntity ownerEntity = ownerRepository.
-                findById(1).orElseThrow();
+                findById(1).orElseThrow(()-> new NotFoundException("Owner Not Found !"));
         return ownerMapper.
                 mapOwnerEntityToDto(ownerEntity);
     }
