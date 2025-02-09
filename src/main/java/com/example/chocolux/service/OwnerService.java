@@ -24,14 +24,18 @@ public class OwnerService {
     @Transactional
     public void editAboutCompany(String aboutCompany){
         log.info("Edit Company Started... ");
+
         OwnerEntity ownerEntity = ownerRepository.
                 findById(1).orElseThrow();
         ownerEntity.setAboutCompany(aboutCompany);
         ownerRepository.save(ownerEntity);
+
         log.info("Edit Company Ended ");
     }
 
     public OwnerDto showAboutCompany(){
+        log.info("Show About Company Started... ");
+
         OwnerEntity ownerEntity = ownerRepository.
                 findById(1).orElseThrow();
         return ownerMapper.
