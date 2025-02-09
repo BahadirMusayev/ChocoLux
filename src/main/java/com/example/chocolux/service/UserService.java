@@ -8,13 +8,14 @@ import com.example.chocolux.dao.repository.UserRepository;
 import com.example.chocolux.mapper.UserMapper;
 import com.example.chocolux.model.UserDtoInput;
 import com.example.chocolux.model.UserDtoOutput;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -35,15 +36,18 @@ public class UserService {
     @Transactional
     public void contactUs(UserDtoInput userDtoInput) {
         log.info("Contact Us Started... ");
+
         UserEntity userEntity = userMapper.
                 mapUserDtoInputToEntity(userDtoInput);
         userRepository.save(userEntity);
+
         log.info("Contact Us Ended ");
     }
 
     @Transactional
     public void sendTestimonial(String email, String testimonial, MultipartFile image) throws IOException {
         log.info("Send Testimonial Started... ");
+
         UserEntity userEntity = userRepository.findByEmail(email);
         if (userEntity == null) {
             throw new NotFoundException("This user has not applied ");
@@ -55,19 +59,44 @@ public class UserService {
         userTestimonial.setImage(imageData);
         userTestimonial.setUserEntity(userEntity);
         userTestimonialRepository.save(userTestimonial);
+
         log.info("Send Testimonial Ended ");
     }
 
-    public UserDtoOutput showTestimonial(Integer id) {
+    public UserDtoOutput showTestimonial(String email, Integer testimonialID) {
         log.info("Show Testimonial Started... ");
+
         UserEntity userEntity = userRepository.
-                findById(id).orElseThrow();
+                findByEmail(email);
         UserDtoOutput userDtoOutput = new UserDtoOutput();
         userDtoOutput.setFullName(userEntity.getFullName());
-        userDtoOutput.setTestimonial(userEntity.getTestimonials().
-                stream().
-                map(UserTestimonialEntity::getTestimonial).
-                collect(Collectors.toList()));
+        userDtoOutput.setTestimonial(userEntity.getTestimonials()
+                .get(testimonialID).getTestimonial());
         return userDtoOutput;
+    }
+
+    public void showTestimonialImage(String email, Integer testimonialID, HttpServletResponse response) throws IOException {
+        log.info("Show Testimonial Image Started... ");
+
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (testimonialID > userEntity.getTestimonials().size() || testimonialID < 0) {
+            throw new RuntimeException("Invalid Testimonial ID");
+        }
+
+        UserTestimonialEntity testimonial = userTestimonialRepository.findById(testimonialID)
+                .orElseThrow(() -> new RuntimeException("Testimonial not found"));
+
+        if (!testimonial.getUserEntity().getId().equals(userEntity.getId())) {
+            throw new RuntimeException("Testimonial does not belong to this user");
+        }
+
+        byte[] imageData = testimonial.getImage();
+
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        response.getOutputStream().write(imageData);
+        response.getOutputStream().flush();
+
+        log.info("Show Testimonial Image Ended ");
     }
 }

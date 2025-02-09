@@ -13,5 +13,5 @@ import java.util.List;
 @Builder
 public class UserDtoOutput {
     private String fullName;
-    private List<String> testimonial;
+    private String testimonial;
 }
